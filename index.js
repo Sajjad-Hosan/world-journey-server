@@ -28,6 +28,7 @@ async function run() {
     const countryCollection = client
       .db("World_Journeys")
       .collection("countryName");
+      const userSpotCollection = client.db("World_Journeys").collection("userSpots");
     // show all tourists spots
     app.get("/tourists", async (req, res) => {
       const result = await touristsCollection.find().toArray();
@@ -86,8 +87,17 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
-    //
-
+    // get user add spot data from database
+    app.get("/userspots",async(req,res) => {
+      const result = await userSpotCollection.find().toArray();
+      res.send(result);
+    })
+    //post or create or save tuor data from client user
+    app.post("/userspot", async (req, res) => {
+      const tourDetails = req.body;
+      const result = await userSpotCollection.insertOne(tourDetails);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
