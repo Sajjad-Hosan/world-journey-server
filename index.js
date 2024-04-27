@@ -44,6 +44,34 @@ async function run() {
       const result = await touristsCollection.findOne(filter);
       res.send(result);
     });
+    // update tourist save data from database
+    app.put("/tourist/:id", async (req, res) => {
+      const id = req.params.id;
+      const update = req.body;
+      console.log(update)
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      const updateData = {
+        $set: {
+          image: update.photoUrl,
+          tourists_spot_name: update.spotName,
+          country_name: update.countryName,
+          location: update.locationName,
+          short_description: update.shortDes,
+          description: update.description,
+          average_cost: update.avgCost,
+          seasonality: update.seasonality,
+          travel_time: update.travelTime,
+          totalVisitorsPerYear: update.totalVisitor,
+        },
+      };
+      const result = await touristsCollection.updateOne(
+        filter,
+        updateData,
+        option
+      );
+      res.send(result);
+    });
     // get user details who is entering
     app.post("/user", async (req, res) => {
       const user = req.body;
