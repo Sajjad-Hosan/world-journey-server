@@ -25,9 +25,17 @@ async function run() {
       .db("World_Journeys")
       .collection("tourists");
     const usersCollection = client.db("World_Journeys").collection("users");
+    const countryCollection = client
+      .db("World_Journeys")
+      .collection("countryName");
     // show all tourists spots
     app.get("/tourists", async (req, res) => {
       const result = await touristsCollection.find().toArray();
+      res.send(result);
+    });
+    // show all country details
+    app.get("/countrys", async (req, res) => {
+      const result = await countryCollection.find().toArray();
       res.send(result);
     });
     // get tourist details card datas
@@ -48,7 +56,7 @@ async function run() {
     app.put("/tourist/:id", async (req, res) => {
       const id = req.params.id;
       const update = req.body;
-      console.log(update)
+      console.log(update);
       const filter = { _id: new ObjectId(id) };
       const option = { upsert: true };
       const updateData = {
