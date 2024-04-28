@@ -151,14 +151,8 @@ async function run() {
       const result = await tourGuidesCollection.find().toArray();
       res.send(result);
     });
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+    // nothing is here
   }
 }
 run().catch(console.dir);
@@ -167,5 +161,5 @@ app.get("/", (req, res) => {
   res.send("THe World Journey Server Is running now!");
 });
 app.listen(port, () => {
-  console.log(`The World Journes Server Port running now ${port}`);
+  console.log(`The World Journeys Server Port running now ${port}`);
 });
