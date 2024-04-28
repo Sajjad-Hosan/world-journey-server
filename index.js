@@ -158,7 +158,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("THe World Journey Server Is running now!");
+  res.send("THe World Journeys Webpage Server Is running now!");
 });
 app.listen(port, () => {
   console.log(`The World Journeys Server Port running now ${port}`);
