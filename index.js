@@ -28,7 +28,9 @@ async function run() {
     const countryCollection = client
       .db("World_Journeys")
       .collection("countryName");
-      const userSpotCollection = client.db("World_Journeys").collection("userSpots");
+    const userSpotCollection = client
+      .db("World_Journeys")
+      .collection("userSpots");
     // show all tourists spots
     app.get("/tourists", async (req, res) => {
       const result = await touristsCollection.find().toArray();
@@ -88,14 +90,57 @@ async function run() {
       res.send(result);
     });
     // get user add spot data from database
-    app.get("/userspots",async(req,res) => {
+    app.get("/user-spots", async (req, res) => {
       const result = await userSpotCollection.find().toArray();
       res.send(result);
-    })
+    });
+    // get user add data from database findone method
+    app.get("/user-spot/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await userSpotCollection.findOne(filter);
+      res.send(result);
+    });
     //post or create or save tuor data from client user
-    app.post("/userspot", async (req, res) => {
+    app.post("/user-spot", async (req, res) => {
       const tourDetails = req.body;
       const result = await userSpotCollection.insertOne(tourDetails);
+      res.send(result);
+    });
+    // update user add spot from database
+    app.put(`/user-spot/:id`, async (req, res) => {
+      const id = req.params.id;
+      const update = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const option = { upsert: true };
+      const updateData = {
+        $set: {
+          spotName: update.spotName,
+          countryName: update.countryName,
+          locationName: update.locationName,
+          shortDes: update.shortDes,
+          description: update.description,
+          avgCost: update.avgCost,
+          travelTime: update.travelTime,
+          photoUrl: update.photoUrl,
+          seasonality: update.seasonality,
+          totalVisitor: update.totalVisitor,
+          userName: update.userName,
+          userEmail: update.userEmail,
+        },
+      };
+      const result = await userSpotCollection.updateOne(
+        filter,
+        updateData,
+        option
+      );
+      res.send(result);
+    });
+    // delete user add data from database
+    app.delete(`/user-spot/:id`, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await userSpotCollection.deleteOne(filter);
       res.send(result);
     });
     // Send a ping to confirm a successful connection
