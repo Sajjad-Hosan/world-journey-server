@@ -31,6 +31,9 @@ async function run() {
     const userSpotCollection = client
       .db("World_Journeys")
       .collection("userSpots");
+    const tourGuidesCollection = client
+      .db("World_Journeys")
+      .collection("guideDetails");
     // show all tourists spots
     app.get("/tourists", async (req, res) => {
       const result = await touristsCollection.find().toArray();
@@ -115,16 +118,16 @@ async function run() {
       const option = { upsert: true };
       const updateData = {
         $set: {
-          spotName: update.spotName,
-          countryName: update.countryName,
-          locationName: update.locationName,
-          shortDes: update.shortDes,
+          tourists_spot_name: update.spotName,
+          country_Name: update.countryName,
+          location: update.locationName,
+          short_description: update.shortDes,
           description: update.description,
-          avgCost: update.avgCost,
-          travelTime: update.travelTime,
-          photoUrl: update.photoUrl,
+          average_cost: update.avgCost,
+          travel_time: update.travelTime,
+          image: update.photoUrl,
           seasonality: update.seasonality,
-          totalVisitor: update.totalVisitor,
+          totalVisitorsPerYear: update.totalVisitor,
           userName: update.userName,
           userEmail: update.userEmail,
         },
@@ -141,6 +144,11 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const result = await userSpotCollection.deleteOne(filter);
+      res.send(result);
+    });
+    // get tour guides data
+    app.get("/guides", async (req, res) => {
+      const result = await tourGuidesCollection.find().toArray();
       res.send(result);
     });
     // Send a ping to confirm a successful connection
